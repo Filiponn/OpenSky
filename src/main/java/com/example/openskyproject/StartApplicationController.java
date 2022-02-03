@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -30,6 +31,8 @@ public class StartApplicationController {
     @FXML
     private ImageView image;
 
+    @FXML
+    private Text textPlanesAmount;
 
 
     @FXML
@@ -52,6 +55,13 @@ public class StartApplicationController {
     void initialize() {
         assert airportBtn != null : "fx:id=\"airportBtn\" was not injected: check your FXML file 'startApplication.fxml'.";
         assert planeBtn != null : "fx:id=\"planeBtn\" was not injected: check your FXML file 'startApplication.fxml'.";
+        double lamin = 49;
+        double lamax = 54.45;
+        double lomin= 14.11;
+        double lomax= 24.12;
+        StringBuffer response = Connector.getResponse("https://opensky-network.org/api/states/all?lamin="+ lamin+"&lomin="+lomin+"&lamax="+lamax+"&lomax="+lomax);
+        int planesAmount = Connector.getPlanesNumber(response);
+        textPlanesAmount.setText(String.valueOf(planesAmount));
 
     }
 

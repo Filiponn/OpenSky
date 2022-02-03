@@ -46,6 +46,20 @@ public class Connector {
 
     }
 
+    public static int getPlanesNumber(StringBuffer response){
+        int planesAmount = 0;
+        JsonElement jsonTree = JsonParser.parseString(String.valueOf(response));
+        if(jsonTree.isJsonObject()){
+            JsonObject jsonObject = jsonTree.getAsJsonObject();
+            JsonElement states = jsonObject.get("states");
+            JsonArray array = states.getAsJsonArray();
+            planesAmount = array.size();
+        }
+        return planesAmount;
+    }
+
+
+
     public static ArrayList<Flight> getAirportFlights(StringBuffer response, Direction direction) {
         ArrayList<Flight> flights = new ArrayList<>();
         JsonElement jsonTree = JsonParser.parseString(String.valueOf(response));
