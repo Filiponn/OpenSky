@@ -9,7 +9,7 @@ import java.net.URL;
 import com.google.gson.*;
 
 public class Connector {
-    public static void getResponse(String url){
+    public static StringBuffer getResponse(String url){
 
         StringBuffer response = new StringBuffer();
 
@@ -34,6 +34,13 @@ public class Connector {
             e.printStackTrace();
         }
 
+        return response;
+
+    }
+
+    public static void main(String[] args) {
+        StringBuffer response = getResponse("https://opensky-network.org/api/states/all?lamin=45.8389&lomin=5.9962&lamax=47.8229&lomax=10.5226");
+
         JsonElement jsonTree = JsonParser.parseString(String.valueOf(response));
 
         if(jsonTree.isJsonObject()){
@@ -47,18 +54,5 @@ public class Connector {
                 System.out.println(array.get(i));
             }
         }
-
-//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//
-//        Map map = gson.fromJson(response.toString(), Map.class);
-//
-//                for (Object key : map.keySet()) {
-//            System.out.println("Key: " + key);
-//        }
-
-    }
-
-    public static void main(String[] args) {
-        getResponse("https://opensky-network.org/api/states/all?lamin=45.8389&lomin=5.9962&lamax=47.8229&lomax=10.5226");
     }
 }
