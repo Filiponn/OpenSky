@@ -5,11 +5,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
 
 import com.google.gson.*;
 
 public class Connector {
-    public static StringBuffer getResponse(String url){
+    public static StringBuffer getResponse(String url) {
 
         StringBuffer response = new StringBuffer();
 
@@ -38,21 +46,63 @@ public class Connector {
 
     }
 
-    public static void main(String[] args) {
-        StringBuffer response = getResponse("https://opensky-network.org/api/states/all?lamin=45.8389&lomin=5.9962&lamax=47.8229&lomax=10.5226");
-
+    public static ArrayList<Flight> getAirportFlights(StringBuffer response, Direction direction) {
+        ArrayList<Flight> flights = new ArrayList<>();
         JsonElement jsonTree = JsonParser.parseString(String.valueOf(response));
+        JsonArray array = jsonTree.getAsJsonArray();
+        for (int i = 0; i < array.size(); i++) {
+            JsonObject line = array.get(i).getAsJsonObject();
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            Map map = gson.fromJson(line.toString(), Map.class);
 
-        if(jsonTree.isJsonObject()){
-            System.out.println("test");
-            JsonObject jsonObject = jsonTree.getAsJsonObject();
-            JsonElement time = jsonObject.get("time");
-            JsonElement states = jsonObject.get("states");
-            System.out.println(time.getAsInt());
-            JsonArray array = states.getAsJsonArray();
-            for(int i = 0; i<array.size(); i++){
-                System.out.println(array.get(i));
+            String icao24 = map.get("icao24").toString();
+
+            String airport;
+            if (direction.equals(Direction.ARRIVALS)) {
+                try {
+                    airport = map.get("estDepartureAirport").toString();
+                } catch (NullPointerException e) {
+                    airport = "Null";
+                }
+            } else {
+                try {
+                    airport = map.get("estArrivalAirport").toString();
+                } catch (NullPointerException e) {
+                    airport = "Null";
+                }
+
             }
+
+
+            String dateString = map.get("lastSeen").toString();
+
+            dateString = dateString.replace(".", "");
+            dateString = dateString.replace("E9", "");
+
+            long dateLong = Long.parseLong(dateString);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String date = sdf.format(new Date(dateLong * 1000));
+
+            flights.add(new Flight(icao24, airport, date));
+
         }
+
+
+        return flights;
+    }
+
+    public static void main(String[] args) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String data = "2022-01-02 13:00";
+        LocalDateTime dateTime = LocalDateTime.parse(data, formatter);
+        ZoneId zone = ZoneId.of("Europe/Warsaw");
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(dateTime, zone);
+
+
+        long unixTime = zonedDateTime.toEpochSecond();
+        System.out.println(unixTime);
+
+
     }
 }
