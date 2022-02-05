@@ -1,49 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.openskyproject.PlaneStage">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.openskyproject.PlaneStage">
     <children>
-        <AnchorPane prefHeight="80.0" prefWidth="800.0" style="-fx-background-color: #2d3ed3;">
+        <AnchorPane prefHeight="80.0" prefWidth="800.0" style="-fx-background-color: #1599EB;">
             <children>
-                <Label alignment="CENTER" layoutX="148.0" layoutY="32.0" prefHeight="14.0" prefWidth="504.0" text="Sprawdź informacje o danym samolocie" textFill="WHITE">
+                <Label alignment="CENTER" layoutX="7.0" layoutY="20.0" prefHeight="38.0" prefWidth="343.0" text="Loty danego samolotu" textFill="WHITE">
                     <font>
-                        <Font name="Arial Black" size="18.0" />
+                        <Font name="Arial Black" size="24.0" />
                     </font>
                 </Label>
             </children>
         </AnchorPane>
-        <TextField fx:id="airportCodeTF" layoutX="319.0" layoutY="144.0" promptText="Wprowadź kod samolotu">
+        <TextField fx:id="planeCodeTF" alignment="CENTER" layoutX="15.0" layoutY="117.0" prefHeight="30.0" prefWidth="160.0" promptText="icao24">
             <font>
                 <Font size="13.0" />
             </font>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
         </TextField>
-        <Label alignment="CENTER" layoutX="319.0" layoutY="109.0" prefHeight="27.0" prefWidth="162.0" text="Kod samolotu">
+        <Label alignment="CENTER" layoutX="14.0" layoutY="82.0" prefHeight="27.0" prefWidth="162.0" text="Kod samolotu">
             <font>
-                <Font size="13.0" />
+                <Font name="Lucida Fax Regular" size="14.0" />
             </font>
         </Label>
-        <TableView layoutX="38.0" layoutY="183.0" prefHeight="466.0" prefWidth="726.0">
+        <TableView fx:id="planeTable" layoutX="38.0" layoutY="202.0" prefHeight="447.0" prefWidth="730.0">
             <columns>
-            <TableColumn prefWidth="119.0" text="Lotnisko startowe" />
-                <TableColumn prefWidth="130.0" text="Loitnisko docelowe" />
-                <TableColumn prefWidth="146.0" text="Aktualne współrzędne" />
-            <TableColumn minWidth="2.0" prefWidth="2.0" text="Column X" />
-            <TableColumn prefWidth="75.0" text="Prędkość" />
-            <TableColumn prefWidth="75.0" text="Column X" />
-            <TableColumn prefWidth="75.0" text="Column X" />
+            <TableColumn fx:id="departureAirportCol" prefWidth="130.0" text="Lotnisko startowe" />
+                <TableColumn fx:id="arrivalAirportCol" prefWidth="130.0" text="Lotnisko docelowe" />
+            <TableColumn fx:id="departureDateCol" prefWidth="130.0" text="Data Odlotu" />
+            <TableColumn fx:id="arrivalDateCol" prefWidth="130.0" text="Data przylotu " />
+            <TableColumn fx:id="optionalAirportsCol" prefWidth="210.0" text="Liczba opcj. lotnisk do lądowania" />
             </columns>
         </TableView>
-        <Button fx:id="menuBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="614.0" layoutY="669.0" mnemonicParsing="false" onAction="#menuBtnOnAction" prefHeight="34.0" prefWidth="186.0" style="-fx-background-color: #3b8076;" text="Powrót do menu startowego" textFill="WHITE">
+        <Button fx:id="menuBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="581.0" layoutY="651.0" mnemonicParsing="false" onAction="#menuBtnOnAction" prefHeight="34.0" prefWidth="186.0" style="-fx-background-color: #1599EB;" text="Powrót do menu startowego" textFill="WHITE">
             <font>
                 <Font size="13.0" />
             </font>
         </Button>
+      <Button fx:id="planeBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="297.0" layoutY="157.0" mnemonicParsing="false" onAction="#showPlanesFlightsOnAction" prefHeight="34.0" prefWidth="123.0" style="-fx-background-color: #1496E6;" text="Pokaż wyniki" textFill="WHITE">
+         <font>
+            <Font name="Berlin Sans FB Demi Bold" size="14.0" />
+         </font>
+      </Button>
+      <Label alignment="CENTER" layoutX="212.0" layoutY="82.0" prefHeight="27.0" prefWidth="293.0" text="Zakres czasowy (maksymalnie 30 dni)">
+         <font>
+            <Font name="Lucida Fax Regular" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="planeDateFromTF" alignment="CENTER" layoutX="187.0" layoutY="117.0" prefHeight="30.0" prefWidth="165.0" promptText="OD  YYYY-MM-DD GG:MM">
+         <font>
+            <Font size="13.0" />
+         </font>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </TextField>
+      <TextField fx:id="planeDateToTF" alignment="CENTER" layoutX="359.0" layoutY="117.0" prefHeight="30.0" prefWidth="165.0" promptText="DO  YYYY-MM-DD GG:MM">
+         <font>
+            <Font size="13.0" />
+         </font>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </TextField>
+      <ImageView fitHeight="203.0" fitWidth="273.0" layoutX="506.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../Images/samolot3.png" />
+         </image>
+      </ImageView>
     </children>
 </AnchorPane>

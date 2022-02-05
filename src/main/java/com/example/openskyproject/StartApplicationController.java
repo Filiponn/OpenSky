@@ -9,12 +9,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class StartApplicationController {
+    private double lamin = 49;
+    private double lamax = 54.45;
+    private double lomin = 14.11;
+    private double lomax = 24.12;
 
     @FXML
     private ResourceBundle resources;
@@ -34,6 +40,9 @@ public class StartApplicationController {
     @FXML
     private Text textPlanesAmount;
 
+    @FXML
+    private Button refreshBtn;
+
 
     @FXML
     void airportBtnOnAction(ActionEvent event) {
@@ -44,9 +53,17 @@ public class StartApplicationController {
 
     @FXML
     void planeBtnOnAction(ActionEvent event) {
-        Stage stage = (Stage) airportBtn.getScene().getWindow();
+        Stage stage = (Stage) planeBtn.getScene().getWindow();
         stage.close();
         createPlaneStage();
+
+    }
+
+    @FXML
+    void refreshBtnOnAction(ActionEvent event) {
+        StringBuffer response = Connector.getResponse("https://opensky-network.org/api/states/all?lamin=" + lamin + "&lomin=" + lomin + "&lamax=" + lamax + "&lomax=" + lomax);
+        int planesAmount = Connector.getPlanesNumber(response);
+        textPlanesAmount.setText(String.valueOf(planesAmount));
 
     }
 
@@ -55,15 +72,12 @@ public class StartApplicationController {
     void initialize() {
         assert airportBtn != null : "fx:id=\"airportBtn\" was not injected: check your FXML file 'startApplication.fxml'.";
         assert planeBtn != null : "fx:id=\"planeBtn\" was not injected: check your FXML file 'startApplication.fxml'.";
-        double lamin = 49;
-        double lamax = 54.45;
-        double lomin= 14.11;
-        double lomax= 24.12;
-        StringBuffer response = Connector.getResponse("https://opensky-network.org/api/states/all?lamin="+ lamin+"&lomin="+lomin+"&lamax="+lamax+"&lomax="+lomax);
+
+        StringBuffer response = Connector.getResponse("https://opensky-network.org/api/states/all?lamin=" + lamin + "&lomin=" + lomin + "&lamax=" + lamax + "&lomax=" + lomax);
         int planesAmount = Connector.getPlanesNumber(response);
         textPlanesAmount.setText(String.valueOf(planesAmount));
-
     }
+
 
     public void createAirportStage() {
         try {
@@ -78,6 +92,7 @@ public class StartApplicationController {
         }
     }
 
+
     public void createPlaneStage() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("planeStage.fxml"));
@@ -90,6 +105,8 @@ public class StartApplicationController {
             e.getCause();
         }
     }
+
+
 }
 
 
