@@ -95,5 +95,15 @@
             <Image url="@../../../Images/samolot2.png" />
          </image>
       </ImageView>
+      <Button fx:id="saveArrivalBtn" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="13.0" layoutY="659.0" mnemonicParsing="false" onAction="#saveArrivalBtnOnAction" prefHeight="35.0" prefWidth="115.0" style="-fx-background-color: #1496E6;" text="Zapisz przyloty" textFill="WHITE">
+         <font>
+            <Font name="Berlin Sans FB Demi Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="saveDepartBtn" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="143.0" layoutY="659.0" mnemonicParsing="false" onAction="#saveDepartBtnOnAction" prefHeight="35.0" prefWidth="115.0" style="-fx-background-color: #1496E6;" text="Zapisz odloty" textFill="WHITE">
+         <font>
+            <Font name="Berlin Sans FB Demi Bold" size="14.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>

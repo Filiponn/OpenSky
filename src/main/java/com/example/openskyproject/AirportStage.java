@@ -1,5 +1,8 @@
 package com.example.openskyproject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -15,11 +18,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class AirportStage {
@@ -73,6 +74,12 @@ public class AirportStage {
     private TableView<Flight> departuresTable;
 
     @FXML
+    private Button saveArrivalBtn;
+
+    @FXML
+    private Button saveDepartBtn;
+
+    @FXML
     void showFlightsOnAction(ActionEvent event) {
         String icao = airportCodeTF.getText().toUpperCase();
         String dateFrom = airportDateFromTF.getText();
@@ -108,6 +115,9 @@ public class AirportStage {
         departuresAirportColumn.setCellValueFactory(new PropertyValueFactory<Flight, String>("airport"));
         departuresDateColumn.setCellValueFactory(new PropertyValueFactory<Flight, String>("date"));
 
+        saveDepartBtn.setDisable(false);
+        saveArrivalBtn.setDisable(false);
+
         arrivalsTable.getItems().clear();
         departuresTable.getItems().clear();
         arrivalsTable.setItems(arrivals);
@@ -128,6 +138,8 @@ public class AirportStage {
         assert airportDateToTF != null : "fx:id=\"airportDateToTF\" was not injected: check your FXML file 'airportStage.fxml'.";
         assert flightsBtn != null : "fx:id=\"flightsBtn\" was not injected: check your FXML file 'airportStage.fxml'.";
         assert menuBtn != null : "fx:id=\"menuBtn1\" was not injected: check your FXML file 'airportStage.fxml'.";
+        assert saveArrivalBtn != null : "fx:id=\"menuBtn1\" was not injected: check your FXML file 'airportStage.fxml'.";
+        assert saveDepartBtn != null : "fx:id=\"menuBtn1\" was not injected: check your FXML file 'airportStage.fxml'.";
 
     }
 
@@ -144,4 +156,64 @@ public class AirportStage {
         }
     }
 
+    public void saveDepartBtnOnAction(ActionEvent event) {
+        Stage secondaryStage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save data to file");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv"));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        if (departures.isEmpty()) {
+            Alert emptyTable = new Alert(Alert.AlertType.ERROR, "EMPTY DEPARTURES TABLE", ButtonType.OK);
+            if (emptyTable.getResult() == ButtonType.OK) {
+                emptyTable.close();
+            }
+        } else {
+            File file = fileChooser.showSaveDialog(secondaryStage);
+            if (file != null) {
+
+                saveToFile(departuresTable.getItems(), file);
+            }
+        }
+    }
+
+    public void saveArrivalBtnOnAction(ActionEvent event) {
+        Stage stage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save data to file");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv"));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        if (arrivals.isEmpty()) {
+            Alert emptyTable = new Alert(Alert.AlertType.ERROR, "EMPTY ARRIVALS TABLE", ButtonType.OK);
+            if (emptyTable.getResult() == ButtonType.OK) {
+                emptyTable.close();
+            }
+        } else {
+            File file = fileChooser.showSaveDialog(stage);
+            if (file != null) {
+                saveToFile(arrivalsTable.getItems(), file);
+            }
+        }
+    }
+
+    public void saveToFile(ObservableList<Flight> observableList, File file) {
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new java.io.FileWriter(file));
+
+            for (Flight flights : observableList) {
+                bufferedWriter.write(flights.getAirport() + "\t" + flights.getDepartueAirport()
+                        + "\t" + flights.getDate() + "\t" + flights.getIcao24());
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.close();
+        } catch (IOException e) {
+            Alert ioAlert = new Alert(Alert.AlertType.ERROR, "Error!", ButtonType.OK);
+            ioAlert.setContentText("Sorry, an error has occurred.");
+            ioAlert.showAndWait();
+            if (ioAlert.getResult() == ButtonType.OK) {
+                ioAlert.close();
+            }
+        }
+    }
 }

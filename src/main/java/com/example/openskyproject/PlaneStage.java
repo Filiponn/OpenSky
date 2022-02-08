@@ -1,5 +1,8 @@
 package com.example.openskyproject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -15,11 +18,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class PlaneStage {
@@ -54,6 +55,9 @@ public class PlaneStage {
 
     @FXML
     private Button planeBtn;
+
+    @FXML
+    private Button saveBtn;
 
     @FXML
     private TextField planeDateFromTF;
@@ -96,6 +100,7 @@ public class PlaneStage {
 
         planeTable.getItems().clear();
         planeTable.setItems(flights);
+        saveBtn.setDisable(false);
 
 
     }
@@ -134,6 +139,47 @@ public class PlaneStage {
         } catch (Exception e) {
             e.printStackTrace();
             e.getCause();
+        }
+    }
+
+    public void saveBtnOnAction(ActionEvent event) {
+        Stage secondaryStage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save data to file");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv"));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        if (flights.isEmpty()) {
+            Alert emptyTable = new Alert(Alert.AlertType.ERROR, "EMPTY DEPARTURES TABLE", ButtonType.OK);
+            if (emptyTable.getResult() == ButtonType.OK) {
+                emptyTable.close();
+            }
+        } else {
+            File file = fileChooser.showSaveDialog(secondaryStage);
+            if (file != null) {
+                saveToFile(planeTable.getItems(), file);
+            }
+        }
+    }
+
+    public void saveToFile(ObservableList<PlaneFlights> observableList, File file) {
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new java.io.FileWriter(file));
+
+            for (PlaneFlights flights : observableList) {
+                bufferedWriter.write(flights.getArrivalAirport() + "\t" + flights.getArrivalDate()
+                        + "\t" + flights.getDepartureAirport() + "\t" + flights.getDepartureDate()+
+                        "\t" + flights.getOptionalAirports());
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.close();
+        } catch (IOException e) {
+            Alert ioAlert = new Alert(Alert.AlertType.ERROR, "Error!", ButtonType.OK);
+            ioAlert.setContentText("Sorry, an error has occurred.");
+            ioAlert.showAndWait();
+            if (ioAlert.getResult() == ButtonType.OK) {
+                ioAlert.close();
+            }
         }
     }
 }

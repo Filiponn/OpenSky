@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.openskyproject.PlaneStage">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.openskyproject.PlaneStage">
     <children>
         <AnchorPane prefHeight="80.0" prefWidth="800.0" style="-fx-background-color: #1599EB;">
             <children>
@@ -80,5 +80,10 @@
             <Image url="@../../../Images/samolot3.png" />
          </image>
       </ImageView>
+      <Button fx:id="saveBtn" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="38.0" layoutY="651.0" mnemonicParsing="false" onAction="#saveBtnOnAction" prefHeight="34.0" prefWidth="103.0" style="-fx-background-color: #1599EB;" text="Zapisz" textFill="WHITE">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>
