@@ -1,20 +1,16 @@
 package com.example.openskyproject;
 
+import com.google.gson.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
-
-import com.google.gson.*;
 
 public class Connector {
 
@@ -86,9 +82,13 @@ public class Connector {
                 }
 
             }
+            String dateString = "";
+            if (direction.equals(Direction.ARRIVALS)) {
+                dateString = map.get("lastSeen").toString();
+            } else {
+                dateString = map.get("firstSeen").toString();
+            }
 
-
-            String dateString = map.get("lastSeen").toString();
 
             dateString = dateString.replace(".", "");
             dateString = dateString.replace("E9", "");
@@ -100,7 +100,6 @@ public class Connector {
             flights.add(new Flight(icao24, airport, date));
 
         }
-
 
         return flights;
     }
