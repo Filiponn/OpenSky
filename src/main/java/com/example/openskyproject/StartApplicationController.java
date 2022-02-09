@@ -61,9 +61,7 @@ public class StartApplicationController {
 
     @FXML
     void refreshBtnOnAction(ActionEvent event) {
-        StringBuffer response = Connector.getResponse("https://opensky-network.org/api/states/all?lamin=" + lamin + "&lomin=" + lomin + "&lamax=" + lamax + "&lomax=" + lomax);
-        int planesAmount = Connector.getPlanesNumber(response);
-        textPlanesAmount.setText(String.valueOf(planesAmount));
+        getPlanesNumber();
 
     }
 
@@ -72,10 +70,7 @@ public class StartApplicationController {
     void initialize() {
         assert airportBtn != null : "fx:id=\"airportBtn\" was not injected: check your FXML file 'startApplication.fxml'.";
         assert planeBtn != null : "fx:id=\"planeBtn\" was not injected: check your FXML file 'startApplication.fxml'.";
-
-        StringBuffer response = Connector.getResponse("https://opensky-network.org/api/states/all?lamin=" + lamin + "&lomin=" + lomin + "&lamax=" + lamax + "&lomax=" + lomax);
-        int planesAmount = Connector.getPlanesNumber(response);
-        textPlanesAmount.setText(String.valueOf(planesAmount));
+        getPlanesNumber();
     }
 
 
@@ -104,6 +99,12 @@ public class StartApplicationController {
             e.printStackTrace();
             e.getCause();
         }
+    }
+
+    public void getPlanesNumber(){
+        StringBuffer response = Connector.getResponse("https://opensky-network.org/api/states/all?lamin=" + lamin + "&lomin=" + lomin + "&lamax=" + lamax + "&lomax=" + lomax);
+        int planesAmount = Connector.getPlanesNumber(response);
+        textPlanesAmount.setText(String.valueOf(planesAmount));
     }
 
 

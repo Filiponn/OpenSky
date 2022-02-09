@@ -17,6 +17,7 @@ import java.util.Map;
 import com.google.gson.*;
 
 public class Connector {
+
     public static StringBuffer getResponse(String url) {
 
         StringBuffer response = new StringBuffer();
@@ -104,6 +105,8 @@ public class Connector {
         return flights;
     }
 
+
+
     public static ArrayList<PlaneFlights> getPlanesFlights(StringBuffer response) {
         ArrayList<PlaneFlights> planeFlights = new ArrayList<>();
 
@@ -163,22 +166,4 @@ public class Connector {
         return planeFlights;
     }
 
-    public static void main(String[] args) {
-
-        String dateFrom = "2021-10-10 13:00";
-        String dateTo = "2021-10-13 13:00";
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-        LocalDateTime date1 = LocalDateTime.parse(dateFrom, formatter);
-        LocalDateTime date2 = LocalDateTime.parse(dateTo, formatter);
-        ZoneId zone = ZoneId.of("Europe/Warsaw");
-        ZonedDateTime zonedDateTime1 = ZonedDateTime.of(date1, zone);
-        ZonedDateTime zonedDateTime2 = ZonedDateTime.of(date2, zone);
-
-        long unixTime1 = zonedDateTime1.toEpochSecond();
-        long unixTime2 = zonedDateTime2.toEpochSecond();
-        System.out.println(unixTime1);
-        System.out.println(unixTime2);
-    }
 }

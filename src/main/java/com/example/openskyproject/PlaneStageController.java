@@ -23,7 +23,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class PlaneStage {
+public class PlaneStageController {
     private ObservableList<PlaneFlights> flights;
 
     @FXML
@@ -102,7 +102,6 @@ public class PlaneStage {
         planeTable.setItems(flights);
         saveBtn.setDisable(false);
 
-
     }
 
     @FXML
@@ -167,9 +166,9 @@ public class PlaneStage {
             BufferedWriter bufferedWriter = new BufferedWriter(new java.io.FileWriter(file));
 
             for (PlaneFlights flights : observableList) {
-                bufferedWriter.write(flights.getArrivalAirport() + "\t" + flights.getArrivalDate()
-                        + "\t" + flights.getDepartureAirport() + "\t" + flights.getDepartureDate()+
-                        "\t" + flights.getOptionalAirports());
+                bufferedWriter.write( flights.getDepartureAirport() + ",\t" + flights.getDepartureDate()
+                        + ",\t" + flights.getArrivalAirport() + ",\t" + flights.getArrivalDate()+
+                        ",\t" + flights.getOptionalAirports());
                 bufferedWriter.newLine();
             }
             bufferedWriter.close();

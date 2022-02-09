@@ -1,5 +1,8 @@
 package com.example.openskyproject;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 public class Flight {
     private String icao24;
     private String airport;
@@ -13,10 +16,6 @@ public class Flight {
 
     public String getIcao24() {
         return icao24;
-    }
-
-    public String getDepartueAirport() {
-        return airport;
     }
 
     public String getAirport() {
@@ -34,5 +33,13 @@ public class Flight {
                 ", airport='" + airport + '\'' +
                 ", date='" + date + '\'' +
                 '}';
+    }
+
+    public static void main(String[] args) {
+        LocalDateTime date1 = LocalDateTime.of(2020,10,10,10,30);
+        LocalDateTime date2 = LocalDateTime.of(2020,11,10,10,30);
+        long roznica = ChronoUnit.DAYS.between(date1, date2);
+        System.out.println(roznica);
+
     }
 }
