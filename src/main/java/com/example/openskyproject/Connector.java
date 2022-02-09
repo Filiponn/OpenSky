@@ -82,22 +82,20 @@ public class Connector {
                 }
 
             }
-            String dateString = "";
+            JsonElement date;
             if (direction.equals(Direction.ARRIVALS)) {
-                dateString = map.get("lastSeen").toString();
+                date = line.get("lastSeen");
             } else {
-                dateString = map.get("firstSeen").toString();
+                date = line.get("firstSeen");
             }
 
-
-            dateString = dateString.replace(".", "");
-            dateString = dateString.replace("E9", "");
+            String dateString = date.getAsString();
 
             long dateLong = Long.parseLong(dateString);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String date = sdf.format(new Date(dateLong * 1000));
+            String date2 = sdf.format(new Date(dateLong * 1000));
 
-            flights.add(new Flight(icao24, airport, date));
+            flights.add(new Flight(icao24, airport, date2));
 
         }
 
